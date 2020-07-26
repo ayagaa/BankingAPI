@@ -58,26 +58,35 @@ namespace BankingAPI.Controllers
         }
 
         [HttpPost("deleteaccount")]
+        [Authorize(Policy = Policies.User)]
         public async Task<ActionResult<string>> DeleteAccount()
         {
             return NotFound("Failed to delete account");
         }
 
         [HttpPost("getbalance")]
-        [Authorize]
-        public async Task<ActionResult<string>> GetBalance()
+        //[Authorize(Policy = Policies.User)]
+        public async Task<ActionResult<string>> GetBalance([FromQuery]
+                                                           string Token)
         {
-            //return NotFound("Failed to get balance");
-            return Ok("Balance is 0");
+            if (!string.IsNullOrEmpty(Token) && Authentication.ValidateToken(Token, Configuration))
+            {
+                return Ok("Balance is 0");
+
+            }
+            else
+                return NotFound("Need More Work");
         }
 
         [HttpPost("depositamount")]
+        [Authorize(Policy = Policies.User)]
         public async Task<ActionResult<string>> DepositAmount()
         {
             return NotFound("Failed to deposit amount");
         }
 
         [HttpPost("withdrawamount")]
+        [Authorize(Policy = Policies.User)]
         public async Task<ActionResult<string>> WithdrawAmount()
         {
             return NotFound("Failed to withraw amount");

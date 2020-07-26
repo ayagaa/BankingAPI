@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Polly;
 using Polly.Extensions.Http;
+using BankingAPI.DataAccess;
 
 namespace BankingAPI
 {
@@ -36,17 +37,25 @@ namespace BankingAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                      {
-                      options.TokenValidationParameters = new TokenValidationParameters
-                     {
-                       ValidateIssuer = true,
-                       ValidateAudience = true,
-                       ValidateLifetime = true,
-                       ValidateIssuerSigningKey = true,
-                       ValidIssuer = Configuration["Jwt:Issuer"],
-                       ValidAudience = Configuration["Jwt:Issuer"],
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                     };
+                         options.RequireHttpsMetadata = false;
+                         options.SaveToken = true;
+                         options.TokenValidationParameters = new TokenValidationParameters
+                         {
+                          ValidateIssuer = true,
+                          ValidateAudience = true,
+                          ValidateLifetime = true,
+                          ValidateIssuerSigningKey = true,
+                          ValidIssuer = Configuration["Jwt:Issuer"],
+                          ValidAudience = Configuration["Jwt:Audience"],
+                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                          ClockSkew = TimeSpan.Zero
+                         };
+                         services.AddCors();
                     });
+            services.AddAuthorization(Configuration =>
+            {
+                Configuration.AddPolicy(Policies.User, Policies.UserPolicy());
+            });
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<BrotliCompressionProvider>();

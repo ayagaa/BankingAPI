@@ -20,6 +20,12 @@ namespace BankingAPI.Models
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }
 
+        [JsonIgnore]
+        public string UserRole
+        {
+            get { return "User"; }
+        }
+
         public override string ToString()
         {
             return string.Format("Username: {0}, Email: {1}, Password: {2}", Username, Email, Password);
