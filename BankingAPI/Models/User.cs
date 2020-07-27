@@ -14,6 +14,10 @@ namespace BankingAPI.Models
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
+        [JsonIgnore]
+        [JsonProperty(PropertyName = "phone")]
+        public string Phone { get; set; }
+
         [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
 

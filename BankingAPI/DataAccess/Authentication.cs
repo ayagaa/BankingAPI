@@ -21,23 +21,13 @@ namespace BankingAPI.DataAccess
             var claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                //new Claim("fullName", user.Username.ToString()),
-                //new Claim("role",user.UserRole),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("userrole",user.UserRole),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            //var descriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new System.Security.Claims.ClaimsIdentity(new[] { new Claim(ClaimTypes.Email, user.Email) }),
-            //    Expires = DateTime.Now.AddMinutes(30),
-            //    SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256),
-            //};
-
             var handler = new JwtSecurityTokenHandler();
 
-            //var token = handler.CreateJwtSecurityToken(descriptor);
             var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
                                              configuration["Jwt:Audience"],
                                              claims: claims,
@@ -53,9 +43,9 @@ namespace BankingAPI.DataAccess
 
             var users = new List<User>
             {
-               new User(){Username = "Allan", Email = "ayagaa@yahoo.com", Password="Email1234$"},
-               new User(){Username = "Tony", Email = "Tn@gmail.com", Password="Email2345%"},
-               new User(){Username = "Reuben", Email = "Rn@gmail.com", Password = "Email3456&"}
+               new User(){Username = "Allan", Email = "odwar235@gmail.com", Password="Email1234$", Phone = "+254722637496"},
+               new User(){Username = "Tony", Email = "Tn@gmail.com", Password="Email2345%", Phone = "+254722637496"},
+               new User(){Username = "Reuben", Email = "Rn@gmail.com", Password = "Email3456&", Phone = "+254722637496"}
             };
 
             if(users?.Count > 0)
@@ -66,12 +56,12 @@ namespace BankingAPI.DataAccess
             return authUser;
         }
 
-        internal static bool ValidateToken(string token, IConfiguration configuration)
+        internal static User ValidateToken(string token, IConfiguration configuration)
         {
             string email = null;
             ClaimsPrincipal principal = GetPrincipal(token, configuration);
 
-            if (principal == null) return false;
+            if (principal == null) return null;
 
             ClaimsIdentity claimsIdentity = null;
 
@@ -81,12 +71,13 @@ namespace BankingAPI.DataAccess
             }
             catch (NullReferenceException)
             {
-                return false;
+                return null;
             }
 
             Claim claim = claimsIdentity.FindFirst(ClaimTypes.Email);
             email = claim.Value;
-            return (!string.IsNullOrEmpty(email)? true : false);
+            
+            return (!string.IsNullOrEmpty(email)? DatabaseService.GetUsers().GetAwaiter().GetResult().Find(user => user.Email == email) : null);
         }
 
         private static ClaimsPrincipal GetPrincipal(string token, IConfiguration configuration)

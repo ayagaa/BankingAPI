@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Polly;
 using Polly.Extensions.Http;
 using BankingAPI.DataAccess;
+using BankingAPI.Models;
 
 namespace BankingAPI
 {
@@ -64,6 +65,8 @@ namespace BankingAPI
                     ResponseCompressionDefaults.MimeTypes.Concat(
                         new[] { "image/svg+xml" });
             });
+            services.Add(new ServiceDescriptor(typeof(BankingContext), new BankingContext(Configuration.GetConnectionString("mainDB"))));
+            services.Add(new ServiceDescriptor(typeof(ReplicaContext), new ReplicaContext(Configuration.GetConnectionString("replicaDB"))));
             services.AddHttpClient("bankAPIClient", client =>
             {
                 client.DefaultRequestHeaders.Accept.Clear();
