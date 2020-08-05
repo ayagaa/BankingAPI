@@ -8,8 +8,14 @@ namespace BankingAPI.Models
 {
     public class User
     {
-        [JsonProperty(PropertyName = "username")]
-        public string Username { get; set; }
+        //[JsonProperty(PropertyName = "username")]
+        //public string Username { get; set; }
+
+        [JsonProperty(PropertyName = "firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty(PropertyName = "lastName")]
+        public string LastName { get; set; }
 
         [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
@@ -24,6 +30,15 @@ namespace BankingAPI.Models
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }
 
+        [JsonProperty(PropertyName = "isAuthenticated")]
+        public bool IsAuthenticated { get; set; }
+
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
+
+        [JsonProperty(PropertyName = "balanceAmount")]
+        public float BalanceAmount { get; set; }
+
         [JsonIgnore]
         public string UserRole
         {
@@ -32,7 +47,7 @@ namespace BankingAPI.Models
 
         public override string ToString()
         {
-            return string.Format("Username: {0}, Email: {1}, Password: {2}", Username, Email, Password);
+            return string.Format("Username: {0}, Email: {1}, Password: {2}", FirstName, Email, Password);
         }
     }
 }

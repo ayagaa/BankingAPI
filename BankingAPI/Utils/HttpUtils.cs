@@ -25,7 +25,6 @@ namespace BankingAPI.Utils
                 return handler = new HttpClientHandler { SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls };
             }
         }
-        internal static string Host = "https://api.awhere.com/v2/";
 
         private static bool CheckConnectivity()
         {

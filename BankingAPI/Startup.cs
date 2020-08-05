@@ -73,6 +73,8 @@ namespace BankingAPI
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }).ConfigurePrimaryHttpMessageHandler(() => { return HttpUtils.HttpClientHandler; }).SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
+            services.AddMemoryCache();
+            services.AddCors();
             services.AddControllers();
         }
 
@@ -85,7 +87,17 @@ namespace BankingAPI
             }
 
             //app.UseHttpsRedirection();
-
+            //Add response headers
+            app.Use(async (context, nextMiddleWhere) =>
+            {
+                context.Response.OnStarting(() =>
+                {
+                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+                    return Task.FromResult(0);
+                });
+                await nextMiddleWhere();
+            });
            
 
             app.UseRouting();
