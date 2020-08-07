@@ -41,12 +41,13 @@ namespace BankingAPI.DataAccess
         {
             User authUser = null;
 
-            var users = new List<User>
-            {
-               new User(){FirstName = "Allan", Email = "odwar235@gmail.com", Password="Email1234$", Phone = "+254722637496"},
-               new User(){FirstName = "Tony", Email = "Tn@gmail.com", Password="Email2345%", Phone = "+254722637496"},
-               new User(){FirstName = "Reuben", Email = "Rn@gmail.com", Password = "Email3456&", Phone = "+254722637496"}
-            };
+            var users = DatabaseService.users;
+            //var users = new List<User>
+            //{
+            //   new User(){FirstName = "Allan", Email = "odwar235@gmail.com", Password="Email1234$", Phone = "+254722637496"},
+            //   new User(){FirstName = "Tony", Email = "Tn@gmail.com", Password="Email2345%", Phone = "+254722637496"},
+            //   new User(){FirstName = "Reuben", Email = "Rn@gmail.com", Password = "Email3456&", Phone = "+254722637496"}
+            //};
 
             if(users?.Count > 0)
             {

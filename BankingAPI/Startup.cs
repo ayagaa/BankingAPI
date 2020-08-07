@@ -35,6 +35,14 @@ namespace BankingAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                      {
@@ -88,17 +96,20 @@ namespace BankingAPI
 
             //app.UseHttpsRedirection();
             //Add response headers
-            app.Use(async (context, nextMiddleWhere) =>
-            {
-                context.Response.OnStarting(() =>
-                {
-                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
-                    return Task.FromResult(0);
-                });
-                await nextMiddleWhere();
-            });
-           
+            //app.Use(async (context, nextMiddleWhere) =>
+            //{
+            //    context.Response.OnStarting(() =>
+            //    {
+            //        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            //        context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+            //        return Task.FromResult(0);
+            //    });
+            //    await nextMiddleWhere();
+            //});
+
+            app.UseCors("CorsPolicy");
+            //app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
+
 
             app.UseRouting();
 

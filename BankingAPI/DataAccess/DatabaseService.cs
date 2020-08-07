@@ -9,14 +9,17 @@ namespace BankingAPI.DataAccess
 {
     internal static class DatabaseService
     {
+        internal static List<User> users = new List<User>()
+        {
+             new User(){FirstName = "Allan", Email = "odwar235@gmail.com", Password="Allan123#", Phone = "+254722637496"},
+             new User(){FirstName = "Tony", Email = "ngangatonny@gmail.com", Password="Tony123#", Phone = "+254722637496"},
+             new User(){FirstName = "Reuben", Email = "rrorigi@gmail.com", Password = "Reuben123#", Phone = "+254722637496"},
+             new User(){FirstName = "Stacy", Email = "salyiela@gmail.com", Password = "Stacy123#", Phone = "+254722637496"}
+        };
+        
         internal static async Task<List<User>> GetUsers()
         {
-            return new List<User>
-            {
-               new User(){FirstName = "Allan", Email = "odwar235@gmail.com", Password="Email1234$", Phone = "+254722637496"},
-               new User(){FirstName = "Tony", Email = "Tn@gmail.com", Password="Email2345%", Phone = "+254722637496"},
-               new User(){FirstName = "Reuben", Email = "Rn@gmail.com", Password = "Email3456&", Phone = "+254722637496"}
-            };
+            return users;
         }
 
         internal static async Task<bool> CreateAccount()
